@@ -3,6 +3,7 @@ import EnterpriseDTO from "../DTOs/EnterpriseDTO";
 import EnterpriseRepository from "../models/repository/EnterpriseRepository";
 import ConflictError from "../errors/ConflictError";
 import IEnterpriseService from "./IEnterpriseService";
+import NotFoundError from "../errors/NotFoundError";
 
 class EnterpriseService implements IEnterpriseService {
     constructor(private enterpriseRepository: EnterpriseRepository) { }
@@ -11,9 +12,9 @@ class EnterpriseService implements IEnterpriseService {
         const { nome, cnpj, endereco } = enterpriseData;
         const enterprise: Enterprise = new Enterprise(nome, cnpj, endereco);
 
-        const enterpriseFound = await this.enterpriseRepository.findByCNPJ(enterprise.cnpj);
+        /*const enterpriseFound = await this.enterpriseRepository.findByCNPJ(enterprise.cnpj);
 
-        if(enterpriseFound) throw new ConflictError('CNPJ já cadastrado');
+        if(enterpriseFound) throw new ConflictError('CNPJ já cadastrado');*/
 
         const enterpriseCreated = await this.enterpriseRepository.create(enterprise);
 
@@ -29,7 +30,7 @@ class EnterpriseService implements IEnterpriseService {
     }
 
     findAll(): Promise<Enterprise[]> {
-        throw new Error('Method not implemented.');
+        return this.enterpriseRepository.findAll();
     }
 
     async findById(id: number): Promise<Enterprise> {

@@ -9,4 +9,9 @@ enterpriseRouter.post('/enterprise', (req: Request, res: Response, next: NextFun
     enterpriseController.create(req, res, next);
 });
 
+enterpriseRouter.get('/enterprise', (req: Request, res: Response, next: NextFunction) => {
+    const enterpriseController = enterpriseFactory.create();
+    enterpriseController.findAll(req, res, next);
+});
+
 export default enterpriseRouter;

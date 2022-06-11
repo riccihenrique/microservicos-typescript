@@ -28,8 +28,13 @@ class EnterpriseController implements IEnterpriseController {
         throw new Error("Method not implemented.");
     }
 
-    findAll(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction): Promise<void> {
-        throw new Error("Method not implemented.");
+    async findAll(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction): Promise<void> {
+        try {
+            const enterprises = await this.enterpriseService.findAll();
+            res.status(200).json(enterprises.map((e) => Enterprise.toDTO(e)));
+        } catch(err) {
+            next(err);
+        }
     }
 
     findById(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction): Promise<void> {

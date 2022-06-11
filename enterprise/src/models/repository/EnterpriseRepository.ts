@@ -18,7 +18,7 @@ class EnterpriseRepository implements IEnterpriseRepository{
         return rows[0] as unknown as Enterprise;
     }
 
-    async update(enterprise: Enterprise): Promise<Enterprise> {
+    async update(): Promise<Enterprise> {
         throw new Error('Method not implemented.');
     }
 
@@ -27,7 +27,8 @@ class EnterpriseRepository implements IEnterpriseRepository{
     }
 
     async findAll(): Promise<Enterprise[]> {
-        throw new Error('Method not implemented.');
+        const { rows } = await this.db.query<QueryResult>('SELECT * FROM enterprises');
+        return rows as unknown as Enterprise[];
     }
 
     async findById(id: number): Promise<Enterprise | null> {
