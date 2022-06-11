@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  api_enterprise:
+    image: node
+    restart: always
+    container_name: api_enterprise
+    command: npm run start:dev
+    working_dir: /app
+    volumes:
+      - ./enterprise:/app
+    environment:
+      - API_PORT=${PORT}
+      - DB_HOST=db_enterprise
+      - DB_PASS=1234
+      - DB_USER=postgres
+      - DB_PORT=5432
+    ports:
+      - 3000:3000
+    env_file:
+      - ./enterprise/.env
+
+  db_enterprise:
+    image: postgres:14.1-alpine
+    container_name: db_enterprise
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local
