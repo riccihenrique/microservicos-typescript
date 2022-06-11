@@ -31,9 +31,7 @@ class App {
     }
 
     private routes() {
-        // app.get('/', (req, res) => res.send('oi'));
         this.app.use(enterpriseRouter);
-        this.app.use('dsdasd/', (req, res) => res.send('dasd'));
     }
 }
 
