@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
 import Enterprise from "../models/entities/Enterprise";
 import EnterpriseService from "../services/EnterpriseService";
 import IEnterpriseController from "./IEnterpriseController";
@@ -11,7 +9,8 @@ class EnterpriseController implements IEnterpriseController {
     async create(req: Request, res: Response, next: NextFunction) {
         try {
             const { nome, cnpj, endereco } = req.body;
-            const enterpriseCreated = await this.enterpriseService.create({ nome, cnpj, endereco });
+            const enterpriseCreated = await this.enterpriseService
+                .create({ nome, cnpj, endereco });
 
             res.status(201).json(Enterprise.toDTO(enterpriseCreated));
         } catch(err) {
@@ -29,8 +28,17 @@ class EnterpriseController implements IEnterpriseController {
         }
     }
 
-    update(req: Request, res: Response, next: NextFunction): Promise<void> {
-        throw new Error("Method not implemented.");
+    async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { nome, cnpj, endereco } = req.body;
+            const { id } = req.params;
+            const enterpriseUpdated = await this.enterpriseService
+                .update({ id: parseInt(id, 10), nome, cnpj, endereco });
+
+            res.status(200).json(Enterprise.toDTO(enterpriseUpdated));
+        } catch(err) {
+            next(err);
+        }
     }
 
     async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {

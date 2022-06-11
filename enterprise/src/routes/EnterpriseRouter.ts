@@ -24,4 +24,9 @@ enterpriseRouter.delete('/enterprise/:id', (req: Request, res: Response, next: N
     enterpriseController.delete(req, res, next);
 });
 
+enterpriseRouter.put('/enterprise/:id', (req: Request, res: Response, next: NextFunction) => {
+    const enterpriseController = enterpriseFactory.create();
+    enterpriseController.update(req, res, next);
+});
+
 export default enterpriseRouter;

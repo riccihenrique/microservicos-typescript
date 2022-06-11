@@ -18,8 +18,10 @@ class EnterpriseRepository implements IEnterpriseRepository{
         return rows[0] as unknown as Enterprise;
     }
 
-    async update(): Promise<Enterprise> {
-        throw new Error('Method not implemented.');
+    async update(enterprise: Enterprise): Promise<Enterprise> {
+        const { rows } = await this.db.query<QueryResult>('UPDATE enterprises SET nome = $1, endereco = $2 WHERE id = $3 RETURNING *',
+            [enterprise.nome, enterprise.endereco, enterprise.id]);
+        return rows[0] as unknown as Enterprise;
     }
 
     async delete(id: number): Promise<void> {

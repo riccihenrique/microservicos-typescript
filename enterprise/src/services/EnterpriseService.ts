@@ -4,6 +4,7 @@ import EnterpriseRepository from "../models/repository/EnterpriseRepository";
 import ConflictError from "../errors/ConflictError";
 import IEnterpriseService from "./IEnterpriseService";
 import NotFoundError from "../errors/NotFoundError";
+import UnprocessableEntityError from "../errors/UnprocessableEntityError";
 
 class EnterpriseService implements IEnterpriseService {
     constructor(private enterpriseRepository: EnterpriseRepository) { }
@@ -22,7 +23,21 @@ class EnterpriseService implements IEnterpriseService {
     }
 
     async update(enterpriseData: EnterpriseDTO): Promise<Enterprise> {
-        throw new Error('Method not implemented.');
+        const { id, nome, cnpj, endereco } = enterpriseData;
+
+        const enterpriseFound = await this.enterpriseRepository.findById(id as number);
+
+        if(!enterpriseFound)
+            throw new NotFoundError('Empresa não encontrada');
+
+        const enterprise: Enterprise = new Enterprise(nome, cnpj, endereco);
+        enterprise.id = id as number;
+
+        if(enterprise.cnpj !== enterpriseFound.cnpj)
+            throw new UnprocessableEntityError('O CNPJ não pode ser alterado');
+
+        const enterpriseUpdated = await this.enterpriseRepository.update(enterprise);
+        return enterpriseUpdated;
     }
 
     async delete(id: number): Promise<void> {
