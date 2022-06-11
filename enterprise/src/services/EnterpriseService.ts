@@ -13,9 +13,9 @@ class EnterpriseService implements IEnterpriseService {
         const { nome, cnpj, endereco } = enterpriseData;
         const enterprise: Enterprise = new Enterprise(nome, cnpj, endereco);
 
-        /*const enterpriseFound = await this.enterpriseRepository.findByCNPJ(enterprise.cnpj);
+        const enterpriseFound = await this.enterpriseRepository.findByCNPJ(enterprise.cnpj);
 
-        if(enterpriseFound) throw new ConflictError('CNPJ já cadastrado');*/
+        if(enterpriseFound) throw new ConflictError('CNPJ já cadastrado');
 
         const enterpriseCreated = await this.enterpriseRepository.create(enterprise);
 
