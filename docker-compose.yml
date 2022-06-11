@@ -1,5 +1,25 @@
 version: '3.8'
 services:
+  db_enterprise:
+    image: postgres
+    container_name: db_enterprise
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=enterprise
+    ports:
+      - 5432:5432
+
+  db_employee:
+    image: postgres
+    container_name: db_employee
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=employee
+    ports:
+      - 5431:5432
+
   api_enterprise:
     image: node
     restart: always
@@ -9,9 +29,9 @@ services:
     volumes:
       - ./enterprise:/app
     environment:
-      - API_PORT=${PORT}
+      - API_PORT=3000
       - DB_HOST=db_enterprise
-      - DB_PASS=1234
+      - DB_PASS=postgres
       - DB_USER=postgres
       - DB_PORT=5432
     ports:
@@ -19,16 +39,24 @@ services:
     env_file:
       - ./enterprise/.env
 
-  db_enterprise:
-    image: postgres:14.1-alpine
-    container_name: db_enterprise
+  api_employee:
+    image: node
     restart: always
-    environment:
-      - POSTGRES_PASSWORD=1234
-    ports:
-      - '5432:5432'
+    container_name: api_employee
+    command: npm run start:dev
+    working_dir: /app
     volumes:
-      - db:/var/lib/postgresql/data
+      - ./employee:/app
+    environment:
+      - API_PORT=3001
+      - DB_HOST=db_employee
+      - DB_PASS=postgres
+      - DB_USER=postgres
+      - DB_PORT=5432
+    ports:
+      - 3001:3001
+    env_file:
+      - ./employee/.env
 
 volumes:
   db:
