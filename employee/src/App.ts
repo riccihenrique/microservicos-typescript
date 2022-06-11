@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import ErrorBase from './errors/ErrorBase';
+import employeeRouter from './routes/EmployeeRouter';
 
 class App {
     private app;
@@ -30,7 +31,7 @@ class App {
     }
 
     private routes() {
-      
+      this.app.use(employeeRouter);
     }
 }
 
