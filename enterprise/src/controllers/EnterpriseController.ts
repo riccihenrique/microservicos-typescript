@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Enterprise from "../models/entities/Enterprise";
-import EnterpriseService from "../services/EnterpriseService";
+import IEnterpriseService from "../services/IEnterpriseService";
 import IEnterpriseController from "./IEnterpriseController";
 
 class EnterpriseController implements IEnterpriseController {
-    constructor(private enterpriseService: EnterpriseService) { }
+    constructor(private enterpriseService: IEnterpriseService) { }
 
     async create(req: Request, res: Response, next: NextFunction) {
         try {

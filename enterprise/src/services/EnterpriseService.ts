@@ -1,13 +1,13 @@
 import Enterprise from "../models/entities/Enterprise";
 import EnterpriseDTO from "../DTOs/EnterpriseDTO";
-import EnterpriseRepository from "../models/repository/EnterpriseRepository";
 import ConflictError from "../errors/ConflictError";
 import IEnterpriseService from "./IEnterpriseService";
 import NotFoundError from "../errors/NotFoundError";
 import UnprocessableEntityError from "../errors/UnprocessableEntityError";
+import IEnterpriseRepository from "../models/repository/IEnterpriseRepository";
 
 class EnterpriseService implements IEnterpriseService {
-    constructor(private enterpriseRepository: EnterpriseRepository) { }
+    constructor(private enterpriseRepository: IEnterpriseRepository) { }
 
     async create(enterpriseData: EnterpriseDTO) {
         const { nome, cnpj, endereco } = enterpriseData;
