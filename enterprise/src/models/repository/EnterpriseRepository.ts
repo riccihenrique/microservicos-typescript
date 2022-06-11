@@ -32,7 +32,9 @@ class EnterpriseRepository implements IEnterpriseRepository{
     }
 
     async findById(id: number): Promise<Enterprise | null> {
-        throw new Error('Method not implemented.');
+        const { rows } = await this.db.query<QueryResult>('SELECT * FROM enterprises WHERE id = $1',
+            [id]);
+        return rows[0] as unknown as Enterprise;
     }
 }
 

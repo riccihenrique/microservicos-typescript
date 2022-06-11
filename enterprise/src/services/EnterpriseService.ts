@@ -34,7 +34,11 @@ class EnterpriseService implements IEnterpriseService {
     }
 
     async findById(id: number): Promise<Enterprise> {
-        throw new Error('Method not implemented.');
+        const enterpriseFound = await this.enterpriseRepository.findById(id);
+
+        if(!enterpriseFound) if(!enterpriseFound) throw new NotFoundError('Empresa não encontrada');
+
+        return enterpriseFound;
     }
 }
 

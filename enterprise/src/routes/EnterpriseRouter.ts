@@ -14,4 +14,9 @@ enterpriseRouter.get('/enterprise', (req: Request, res: Response, next: NextFunc
     enterpriseController.findAll(req, res, next);
 });
 
+enterpriseRouter.get('/enterprise/:id', (req: Request, res: Response, next: NextFunction) => {
+    const enterpriseController = enterpriseFactory.create();
+    enterpriseController.findById(req, res, next);
+});
+
 export default enterpriseRouter;

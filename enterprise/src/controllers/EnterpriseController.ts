@@ -36,8 +36,14 @@ class EnterpriseController implements IEnterpriseController {
         }
     }
 
-    findById(req: Request, res: Response, next: NextFunction): Promise<void> {
-        throw new Error("Method not implemented.");
+    async findById(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { id } = req.params;
+            const enterprise = await this.enterpriseService.findById(parseInt(id, 10));
+            res.status(200).json(Enterprise.toDTO(enterprise));
+        } catch(err) {
+            next(err);
+        }
     }
 }
 
