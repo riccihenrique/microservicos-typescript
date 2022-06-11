@@ -1,5 +1,3 @@
-CREATE DATABASE enterprise;
-
 CREATE TABLE enterprises (
 	id SERIAL NOT NULL PRIMARY KEY,
 	nome varchar(100) NOT NULL,
@@ -8,7 +6,7 @@ CREATE TABLE enterprises (
 	id_integracao INT
 );
 
-CREATE TABLE employee (
+CREATE TABLE employees (
 	id SERIAL NOT NULL PRIMARY KEY,
 	nome VARCHAR(100) NOT NULL,
 	cpf VARCHAR(11) NOT NULL,
@@ -22,5 +20,5 @@ CREATE TABLE employee_enterprise (
 	employee_id INT NOT NULL,
     CONSTRAINT pk_employee_enterprise PRIMARY KEY (enterprise_id, employee_id),
     CONSTRAINT fk_enterprise_id FOREIGN KEY (enterprise_id) REFERENCES enterprises(id),
-    CONSTRAINT fk_enterprise_id FOREIGN KEY (employee_id) REFERENCES employees(id)
+    CONSTRAINT fk_employee_id FOREIGN KEY (employee_id) REFERENCES employees(id)
 );
