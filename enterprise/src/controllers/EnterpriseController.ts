@@ -14,21 +14,20 @@ class EnterpriseController implements IEnterpriseController {
             const enterpriseCreated = await this.enterpriseService.create({ nome, cnpj, endereco });
 
             res.status(201).json(Enterprise.toDTO(enterpriseCreated));
-        }
-        catch(err) {
+        } catch(err) {
             next(err);
         }
     }
 
-    delete(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction): Promise<void> {
+    delete(req: Request, res: Response, next: NextFunction): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
-    update(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction): Promise<void> {
+    update(req: Request, res: Response, next: NextFunction): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
-    async findAll(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction): Promise<void> {
+    async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const enterprises = await this.enterpriseService.findAll();
             res.status(200).json(enterprises.map((e) => Enterprise.toDTO(e)));
@@ -37,7 +36,7 @@ class EnterpriseController implements IEnterpriseController {
         }
     }
 
-    findById(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction): Promise<void> {
+    findById(req: Request, res: Response, next: NextFunction): Promise<void> {
         throw new Error("Method not implemented.");
     }
 }
