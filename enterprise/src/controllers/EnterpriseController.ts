@@ -19,8 +19,14 @@ class EnterpriseController implements IEnterpriseController {
         }
     }
 
-    delete(req: Request, res: Response, next: NextFunction): Promise<void> {
-        throw new Error("Method not implemented.");
+    async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { id } = req.params;
+            await this.enterpriseService.delete(parseInt(id, 10));
+            res.status(204).end();
+        } catch(err) {
+            next(err);
+        }
     }
 
     update(req: Request, res: Response, next: NextFunction): Promise<void> {

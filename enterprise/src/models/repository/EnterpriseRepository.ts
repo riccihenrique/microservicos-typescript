@@ -23,7 +23,7 @@ class EnterpriseRepository implements IEnterpriseRepository{
     }
 
     async delete(id: number): Promise<void> {
-        throw new Error('Method not implemented.');
+        await this.db.query<QueryResult>('DELETE FROM enterprises WHERE id = $1', [id]);
     }
 
     async findAll(): Promise<Enterprise[]> {

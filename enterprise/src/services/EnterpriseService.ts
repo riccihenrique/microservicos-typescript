@@ -26,7 +26,11 @@ class EnterpriseService implements IEnterpriseService {
     }
 
     async delete(id: number): Promise<void> {
-        throw new Error('Method not implemented.');
+        const enterpriseFound = await this.enterpriseRepository.findById(id);
+
+        if(!enterpriseFound) throw new NotFoundError('Empresa não encontrada');
+
+        await this.enterpriseRepository.delete(id);
     }
 
     findAll(): Promise<Enterprise[]> {
