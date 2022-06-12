@@ -7,11 +7,14 @@ import UnprocessableEntityError from "../errors/UnprocessableEntityError";
 import IEmployeeRepository from "../models/repository/IEmployeeRepository";
 import IEnterpriseRepository from "../models/repository/IEnterpriseRepository";
 import BadRequestError from "../errors/BadRequestError";
+import IBrokerServer from "../broker/server/IBrokerServer";
+import { RABBIT_CONFIG } from "../broker/config";
 
 class EmployeeService implements IEmployeeService {
     constructor(
         private employeeRepository: IEmployeeRepository,
-        private enterpriseRepository: IEnterpriseRepository
+        private enterpriseRepository: IEnterpriseRepository,
+        private messageBroker: IBrokerServer,
     ) { }
 
     async create(employeeData: EmployeeDTO) {
@@ -27,6 +30,11 @@ class EmployeeService implements IEmployeeService {
         employee = await this.enterprise_check(employee, employeeData.empresas);
 
         const employeeCreated = await this.employeeRepository.create(employee);
+        this.messageBroker.publishInExchange(
+            RABBIT_CONFIG.EXCHANGE_NAME,
+            RABBIT_CONFIG.QUEUE_EMPLOYEE_CREATED,
+            Employee.toDTO(employeeCreated)
+        );
 
         return employeeCreated;
     }

@@ -1,4 +1,6 @@
 import { ConsumeMessage } from 'amqplib';
+import EmployeeCreated from '../events/handles/employee/EmployeeCreated';
+import EmployeeCreatedFactory from '../factories/EmployeeCreatedFactory';
 import { RABBIT_CONFIG } from './config';
 import RabbitMqServer from './server/RabbitmqServer';
 
@@ -19,7 +21,7 @@ export default class RabbitMQSetup {
             await rabbitInstance.bindQueue(RABBIT_CONFIG.QUEUE_ENTERPRISE_DELETED, RABBIT_CONFIG.EXCHANGE_NAME, RABBIT_CONFIG.ROUTING_KEY_ENTERPRISE_DELETED);
 
             await rabbitInstance.consumeMessage(RABBIT_CONFIG.QUEUE_EMPLOYEE_CREATED, (message: ConsumeMessage) => {
-
+                new EmployeeCreatedFactory().create().handle(JSON.parse(message.content.toString()));
             });
 
             await rabbitInstance.consumeMessage(RABBIT_CONFIG.QUEUE_EMPLOYEE_UPDATED, (message: ConsumeMessage) => {

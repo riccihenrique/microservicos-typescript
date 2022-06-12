@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import EnterpriseFactory from '../factories/EnterpriseFactory';
+import EnterpriseControllerFactory from '../factories/EnterpriseControllerFactory';
 
 const enterpriseRouter = Router();
-const enterpriseFactory = new EnterpriseFactory();
+const enterpriseFactory = new EnterpriseControllerFactory();
 
 enterpriseRouter.route('/enterprise')
 .post((req: Request, res: Response, next: NextFunction) => {
