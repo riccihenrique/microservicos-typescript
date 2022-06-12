@@ -1,5 +1,6 @@
 import { Pool, QueryResult } from 'pg';
 import Employee from '../entities/Employee';
+import Enterprise from '../entities/Enterprise';
 import IEmployeeRepository from './IEmployeeRepository';
 
 class EmployeeRepository implements IEmployeeRepository{
@@ -12,12 +13,7 @@ class EmployeeRepository implements IEmployeeRepository{
         );
         employee.id = (rows[0] as unknown as Employee).id;
 
-        for(let enterprise of employee.empresas) {
-            await this.db.query<QueryResult>(
-                'INSERT INTO employee_enterprise (enterprise_id, employee_id) VALUES ($1, $2)',
-                [enterprise.id, employee.id]
-            );
-        }
+        await this.insertEmployeEnterprises(employee);
 
         return employee;
     }
@@ -31,14 +27,19 @@ class EmployeeRepository implements IEmployeeRepository{
     }
 
     async update(employee: Employee): Promise<Employee> {
+        await this.db.query('DELETE FROM employee_enterprise WHERE employee_id = $1', [employee.id]);
+
         const { rows } = await this.db.query<QueryResult>(
             'UPDATE employees SET nome = $1, email = $2, endereco = $3 WHERE id = $4 RETURNING *',
             [employee.nome, employee.email, employee.endereco, employee.id]
         );
+
+        await this.insertEmployeEnterprises(employee);
         return rows[0] as unknown as Employee;
     }
 
     async delete(id: number): Promise<void> {
+        await this.db.query('DELETE FROM employee_enterprise WHERE employee_id = $1', [id]);
         await this.db.query<QueryResult>('DELETE FROM employees WHERE id = $1', [id]);
     }
 
@@ -53,6 +54,15 @@ class EmployeeRepository implements IEmployeeRepository{
             [id]
         );
         return rows[0] as unknown as Employee;
+    }
+
+    private async insertEmployeEnterprises(employee: Employee) {
+        for(let enterprise of employee.empresas) {
+            await this.db.query<QueryResult>(
+                'INSERT INTO employee_enterprise (enterprise_id, employee_id) VALUES ($1, $2)',
+                [enterprise.id, employee.id]
+            );
+        }
     }
 }
 

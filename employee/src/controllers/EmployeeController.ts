@@ -30,10 +30,10 @@ class EmployeeController implements IEmployeeController {
 
     async update(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { nome, cpf, email, endereco } = req.body;
+            const { nome, cpf, email, endereco, empresas } = req.body;
             const { id } = req.params;
             const employeeUpdated = await this.employeeService
-                .update({ id: parseInt(id, 10), nome, cpf, email, endereco });
+                .update({ id: parseInt(id, 10), nome, cpf, email, endereco, empresas });
 
             res.status(200).json(Employee.toDTO(employeeUpdated));
         } catch(err) {

@@ -16,7 +16,7 @@ class EmployeeService implements IEmployeeService {
 
     async create(employeeData: EmployeeDTO) {
         const { nome, cpf, email, endereco } = employeeData;
-        const employee: Employee = new Employee(nome, cpf, email, endereco);
+        let employee: Employee = new Employee(nome, cpf, email, endereco);
 
         if(!employeeData.empresas || employeeData.empresas.length === 0)
             throw new BadRequestError('O campo empresas é obrigatório');
@@ -24,12 +24,7 @@ class EmployeeService implements IEmployeeService {
         const employeeFound = await this.employeeRepository.findByCPF(employee.cpf);
         if(employeeFound) throw new ConflictError('CPF já cadastrado');
 
-        for(let cnpj of employeeData.empresas) {
-            cnpj = cnpj.replace(/[^\d]+/g, '');
-            const enterprise = await this.enterpriseRepository.findByCNPJ(cnpj);
-            if(!enterprise) throw new NotFoundError(`Empresa não encontrada`);
-            employee.addEmpresas(enterprise);
-        }
+        employee = await this.enterprise_check(employee, employeeData.empresas);
 
         const employeeCreated = await this.employeeRepository.create(employee);
 
@@ -37,18 +32,21 @@ class EmployeeService implements IEmployeeService {
     }
 
     async update(employeeData: EmployeeDTO): Promise<Employee> {
-        const { id, nome, cpf, email, endereco } = employeeData;
-
-        const employeeFound = await this.employeeRepository.findById(id as number);
+        const employeeFound = await this.employeeRepository.findById(employeeData.id as number);
 
         if(!employeeFound)
             throw new NotFoundError('Colaborador não encontrado');
 
-        const employee: Employee = new Employee(nome, cpf, email, endereco);
-        employee.id = id as number;
+        let employee: Employee = new Employee(employeeData.nome, employeeData.cpf, employeeData.email, employeeData.endereco);
+        employee.id = employeeData.id as number;
 
         if(employee.cpf !== employeeFound.cpf)
             throw new UnprocessableEntityError('O CPF não pode ser alterado');
+
+        if(!employeeData.empresas || employeeData.empresas.length === 0)
+            throw new BadRequestError('O campo empresas é obrigatório');
+
+        employee = await this.enterprise_check(employee, employeeData.empresas);
 
         const employeeUpdated = await this.employeeRepository.update(employee);
         return employeeUpdated;
@@ -72,6 +70,16 @@ class EmployeeService implements IEmployeeService {
         if(!employeeFound) if(!employeeFound) throw new NotFoundError('Colaborador não encontrado');
 
         return employeeFound;
+    }
+
+    private async enterprise_check(employee: Employee, enterprises: string[]): Promise<Employee> {
+        for(let cnpj of enterprises) {
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+            const enterprise = await this.enterpriseRepository.findByCNPJ(cnpj);
+            if(!enterprise) throw new NotFoundError(`Empresa não encontrada`);
+            employee.addEmpresas(enterprise);
+        }
+        return employee;
     }
 }
 
