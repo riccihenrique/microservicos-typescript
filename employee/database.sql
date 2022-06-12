@@ -11,8 +11,7 @@ CREATE TABLE employees (
 	nome VARCHAR(100) NOT NULL,
 	cpf VARCHAR(11) NOT NULL,
 	email VARCHAR(50) NOT NULL,
-	endereco VARCHAR(200) NOT NULL,
-	id_integracao INT
+	endereco VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE employee_enterprise (

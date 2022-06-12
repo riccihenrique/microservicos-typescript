@@ -2,8 +2,7 @@ CREATE TABLE enterprises (
 	id SERIAL NOT NULL PRIMARY KEY,
 	nome varchar(100) NOT NULL,
 	cnpj varchar(14) NOT NULL,
-	endereco varchar(200) NOT NULL,
-	id_integracao INT
+	endereco varchar(200) NOT NULL
 );
 
 CREATE TABLE employees (
