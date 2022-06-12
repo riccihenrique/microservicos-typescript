@@ -44,6 +44,11 @@ class EnterpriseService implements IEnterpriseService {
             throw new UnprocessableEntityError('O CNPJ não pode ser alterado');
 
         const enterpriseUpdated = await this.enterpriseRepository.update(enterprise);
+        this.messageBroker.publishInExchange(
+            RABBIT_CONFIG.EXCHANGE_NAME,
+            RABBIT_CONFIG.ROUTING_KEY_ENTERPRISE_UPDATED,
+            Enterprise.toDTO(enterpriseUpdated)
+        );
         return enterpriseUpdated;
     }
 
@@ -53,6 +58,11 @@ class EnterpriseService implements IEnterpriseService {
         if(!enterpriseFound) throw new NotFoundError('Empresa não encontrada');
 
         await this.enterpriseRepository.delete(id);
+        this.messageBroker.publishInExchange(
+            RABBIT_CONFIG.EXCHANGE_NAME,
+            RABBIT_CONFIG.ROUTING_KEY_ENTERPRISE_DELETED,
+            Enterprise.toDTO(enterpriseFound)
+        );
     }
 
     findAll(): Promise<Enterprise[]> {
