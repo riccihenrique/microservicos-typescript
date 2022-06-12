@@ -8,9 +8,9 @@ class EmployeeController implements IEmployeeController {
 
     async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const { nome, cpf, email, endereco } = req.body;
+            const { nome, cpf, email, endereco, empresas } = req.body;
             const employeeCreated = await this.employeeService
-                .create({ nome, cpf, email, endereco });
+                .create({ nome, cpf, email, endereco, empresas });
 
             res.status(201).json(Employee.toDTO(employeeCreated));
         } catch(err) {

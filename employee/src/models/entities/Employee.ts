@@ -1,7 +1,9 @@
 import EmployeeDTO from "../../DTOs/EmployeeDTO";
 import BadRequestError from "../../errors/BadRequestError";
+import ConflictError from "../../errors/ConflictError";
 import UnprocessableEntityError from "../../errors/UnprocessableEntityError";
 import CPFValidator from "../../utils/CPFValidator";
+import Enterprise from "./Enterprise";
 
 class Employee {
     private _id: number = 0;
@@ -9,6 +11,7 @@ class Employee {
     private _cpf: string = '';
     private _email: string = '';
     private _endereco: string = '';
+    private _empresas: Enterprise[] = [];
 
     constructor(nome: string, cpf: string, email: string, endereco: string) {
         this.nome = nome;
@@ -44,7 +47,8 @@ class Employee {
         cpf = cpf.replace(/[^\d]+/g, '');
         const cpfValidator = new CPFValidator();
 
-        if(!cpfValidator.validate(cpf)) throw new UnprocessableEntityError('CPF inválido');
+        if(!cpfValidator.validate(cpf))
+            throw new UnprocessableEntityError('CPF inválido');
 
         this._cpf = cpf;
     }
@@ -70,6 +74,17 @@ class Employee {
 
         this._email = email;
     }
+
+    get empresas() {
+        return this._empresas;
+    }
+
+    addEmpresas(empresas: Enterprise) {
+        if(this._empresas.find((e) => e.cnpj === empresas.cnpj))
+            throw new ConflictError('Empresa duplicada');
+        this._empresas.push(empresas);
+    }
+
 
     public static toDTO(employee: Employee) {
         return {

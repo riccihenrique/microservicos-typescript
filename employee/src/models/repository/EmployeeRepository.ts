@@ -6,21 +6,35 @@ class EmployeeRepository implements IEmployeeRepository{
     constructor(private db: Pool) {}
 
     async create(employee: Employee): Promise<Employee> {
-        const { rows } = await this.db.query<QueryResult>('INSERT INTO employees (nome, cpf, email, endereco) VALUES ($1, $2, $3, $4) RETURNING *',
-            [employee.nome, employee.cpf, employee.email, employee.endereco]);
+        const { rows } = await this.db.query<QueryResult>(
+            'INSERT INTO employees (nome, cpf, email, endereco) VALUES ($1, $2, $3, $4) RETURNING *',
+            [employee.nome, employee.cpf, employee.email, employee.endereco]
+        );
         employee.id = (rows[0] as unknown as Employee).id;
+
+        for(let enterprise of employee.empresas) {
+            await this.db.query<QueryResult>(
+                'INSERT INTO employee_enterprise (enterprise_id, employee_id) VALUES ($1, $2)',
+                [enterprise.id, employee.id]
+            );
+        }
+
         return employee;
     }
 
     async findByCPF(cpf: string): Promise<Employee | null> {
-        const { rows } = await this.db.query<QueryResult>('SELECT * FROM employees WHERE cpf = $1',
-            [cpf]);
+        const { rows } = await this.db.query<QueryResult>(
+            'SELECT * FROM employees WHERE cpf = $1',
+            [cpf]
+        );
         return rows[0] as unknown as Employee;
     }
 
     async update(employee: Employee): Promise<Employee> {
-        const { rows } = await this.db.query<QueryResult>('UPDATE employees SET nome = $1, email = $2, endereco = $3 WHERE id = $4 RETURNING *',
-            [employee.nome, employee.email, employee.endereco, employee.id]);
+        const { rows } = await this.db.query<QueryResult>(
+            'UPDATE employees SET nome = $1, email = $2, endereco = $3 WHERE id = $4 RETURNING *',
+            [employee.nome, employee.email, employee.endereco, employee.id]
+        );
         return rows[0] as unknown as Employee;
     }
 
@@ -34,8 +48,10 @@ class EmployeeRepository implements IEmployeeRepository{
     }
 
     async findById(id: number): Promise<Employee | null> {
-        const { rows } = await this.db.query<QueryResult>('SELECT * FROM employees WHERE id = $1',
-            [id]);
+        const { rows } = await this.db.query<QueryResult>(
+            'SELECT * FROM employees WHERE id = $1',
+            [id]
+        );
         return rows[0] as unknown as Employee;
     }
 }

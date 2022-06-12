@@ -5,17 +5,31 @@ import IEmployeeService from "./IEmployeeService";
 import NotFoundError from "../errors/NotFoundError";
 import UnprocessableEntityError from "../errors/UnprocessableEntityError";
 import IEmployeeRepository from "../models/repository/IEmployeeRepository";
+import IEnterpriseRepository from "../models/repository/IEnterpriseRepository";
+import BadRequestError from "../errors/BadRequestError";
 
 class EmployeeService implements IEmployeeService {
-    constructor(private employeeRepository: IEmployeeRepository) { }
+    constructor(
+        private employeeRepository: IEmployeeRepository,
+        private enterpriseRepository: IEnterpriseRepository
+    ) { }
 
     async create(employeeData: EmployeeDTO) {
         const { nome, cpf, email, endereco } = employeeData;
         const employee: Employee = new Employee(nome, cpf, email, endereco);
 
-        const employeeFound = await this.employeeRepository.findByCPF(employee.cpf);
+        if(!employeeData.empresas || employeeData.empresas.length === 0)
+            throw new BadRequestError('O campo empresas é obrigatório');
 
+        const employeeFound = await this.employeeRepository.findByCPF(employee.cpf);
         if(employeeFound) throw new ConflictError('CPF já cadastrado');
+
+        for(let cnpj of employeeData.empresas) {
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+            const enterprise = await this.enterpriseRepository.findByCNPJ(cnpj);
+            if(!enterprise) throw new NotFoundError(`Empresa não encontrada`);
+            employee.addEmpresas(enterprise);
+        }
 
         const employeeCreated = await this.employeeRepository.create(employee);
 
