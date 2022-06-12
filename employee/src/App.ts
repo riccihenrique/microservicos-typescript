@@ -1,9 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express';
+import RabbitMQSetup from './broker/RabbitMQSetup';
 import ErrorBase from './errors/ErrorBase';
 import employeeRouter from './routes/EmployeeRouter';
 
 class App {
     private app;
+
     constructor() {
       this.app = express();
 
@@ -13,7 +15,10 @@ class App {
     }
 
     listen(port: string) {
-      this.app.listen(port, () => console.log(`Running on ${port} port.`));
+      this.app.listen(port, async () => {
+        RabbitMQSetup.init();
+        console.log(`Running on ${port} port.`)}
+      );
     }
 
     private middlewares() {
@@ -26,7 +31,7 @@ class App {
           return res.status(err.stausCode).json({ message: err.message });
         }
         console.log(err);
-        res.status(500).json({ message: 'Internal error' });
+        res.status(500).json({ message: 'Internal server error' });
       });
     }
 
