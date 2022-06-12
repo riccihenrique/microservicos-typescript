@@ -1,4 +1,8 @@
 import { Pool, QueryResult } from 'pg';
+import EmployeeDTO from '../../DTOs/EmployeeDTO';
+import EnterpriseDTO from '../../DTOs/EnterpriseDTO';
+import EmployeeFactory from '../../factories/EmployeeFactory';
+import EnterpriseFactory from '../../factories/EnterpriseFactory';
 import Enterprise from '../entities/Enterprise';
 import IEnterpriseRepository from './IEnterpriseRepository';
 
@@ -37,13 +41,45 @@ class EnterpriseRepository implements IEnterpriseRepository{
 
     async findAll(): Promise<Enterprise[]> {
         const { rows } = await this.db.query<QueryResult>('SELECT * FROM enterprises');
-        return rows as unknown as Enterprise[];
+
+        const enterprises: Enterprise[] = [];
+        for(let row of rows) {
+            let enterprise =new EnterpriseFactory().create(row as unknown as EnterpriseDTO);
+            enterprise = await this.addEmployeeInfo(enterprise);
+            enterprises.push(enterprise);
+        }
+
+        return enterprises;
     }
 
     async findById(id: number): Promise<Enterprise | null> {
-        const { rows } = await this.db.query<QueryResult>('SELECT * FROM enterprises WHERE id = $1',
-            [id]);
-        return rows[0] as unknown as Enterprise;
+        const { rows } = await this.db.query<QueryResult>(
+            'SELECT * FROM enterprises WHERE id = $1',
+            [id]
+        );
+
+        if(!rows[0]) return null;
+
+        let enterprise = new EnterpriseFactory().create(rows[0] as unknown as EnterpriseDTO);
+        enterprise = await this.addEmployeeInfo(enterprise);
+
+        return enterprise;
+    }
+
+    private async addEmployeeInfo(enterprise: Enterprise): Promise<Enterprise> {
+        const result = await this.db.query<QueryResult>(
+            `SELECT emp.*
+            FROM employees emp
+            INNER JOIN employee_enterprise ee ON emp.id = ee.employee_id
+            WHERE ee.enterprise_id = $1`,
+            [enterprise.id]
+        );
+
+        for(let employee of result.rows) {
+            enterprise.addFuncionario(new EmployeeFactory().create(employee as unknown as EmployeeDTO));
+        }
+
+        return enterprise;
     }
 }
 

@@ -12,7 +12,7 @@ class EnterpriseController implements IEnterpriseController {
             const enterpriseCreated = await this.enterpriseService
                 .create({ nome, cnpj, endereco });
 
-            res.status(201).json(Enterprise.toDTO(enterpriseCreated));
+            res.status(201).json(Enterprise.toViewModel(enterpriseCreated));
         } catch(err) {
             next(err);
         }
@@ -35,7 +35,7 @@ class EnterpriseController implements IEnterpriseController {
             const enterpriseUpdated = await this.enterpriseService
                 .update({ id: parseInt(id, 10), nome, cnpj, endereco });
 
-            res.status(200).json(Enterprise.toDTO(enterpriseUpdated));
+            res.status(200).json(Enterprise.toViewModel(enterpriseUpdated));
         } catch(err) {
             next(err);
         }
@@ -44,7 +44,7 @@ class EnterpriseController implements IEnterpriseController {
     async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const enterprises = await this.enterpriseService.findAll();
-            res.status(200).json(enterprises.map((e) => Enterprise.toDTO(e)));
+            res.status(200).json(enterprises.map((e) => Enterprise.toViewModel(e)));
         } catch(err) {
             next(err);
         }
@@ -54,7 +54,7 @@ class EnterpriseController implements IEnterpriseController {
         try {
             const { id } = req.params;
             const enterprise = await this.enterpriseService.findById(parseInt(id, 10));
-            res.status(200).json(Enterprise.toDTO(enterprise));
+            res.status(200).json(Enterprise.toViewModel(enterprise));
         } catch(err) {
             next(err);
         }

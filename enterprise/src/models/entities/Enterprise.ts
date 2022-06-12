@@ -1,13 +1,15 @@
-import EnterpriseDTO from "../../DTOs/EnterpriseDTO";
 import BadRequestError from "../../errors/BadRequestError";
 import UnprocessableEntityError from "../../errors/UnprocessableEntityError";
 import CNPJValidator from "../../utils/CNPJValidator";
+import EnterpriseViewModel from "../../viewModels/EnterpriseViewModel";
+import Employee from "./Employee";
 
 class Enterprise {
     private _id: number = 0;
     private _nome: string = '';
     private _cnpj: string = '';
     private _endereco: string = '';
+    private _funcionarios: Employee[] = [];
 
     constructor(nome: string, cnpj: string, endereco: string) {
         this.nome = nome;
@@ -56,13 +58,31 @@ class Enterprise {
         this._endereco = endereco;
     }
 
+    get funcionarios() {
+        return this._funcionarios;
+    }
+
+    addFuncionario(employee: Employee) {
+        this._funcionarios.push(employee);
+    }
+
     public static toDTO(enterprise: Enterprise) {
         return {
             id: enterprise.id,
             nome: enterprise.nome,
             cnpj: enterprise.cnpj,
             endereco: enterprise.endereco,
-        } as EnterpriseDTO
+        };
+    }
+
+    public static toViewModel(enterprise: Enterprise): EnterpriseViewModel {
+        return {
+            id: enterprise.id,
+            nome: enterprise.nome,
+            cnpj: enterprise.cnpj,
+            endereco: enterprise.endereco,
+            funcionarios: enterprise.funcionarios.map((f) => Employee.toViewModel(f)),
+        };
     }
 }
 
