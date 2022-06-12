@@ -71,6 +71,12 @@ class EmployeeService implements IEmployeeService {
 
         if(!employeeFound) throw new NotFoundError('Colaborador não encontrado');
 
+        this.messageBroker.publishInExchange(
+            RABBIT_CONFIG.EXCHANGE_NAME,
+            RABBIT_CONFIG.QUEUE_EMPLOYEE_DELETED,
+            Employee.toDTO(employeeFound)
+        );
+
         await this.employeeRepository.delete(id);
     }
 

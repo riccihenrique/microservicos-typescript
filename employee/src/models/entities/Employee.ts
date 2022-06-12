@@ -93,7 +93,7 @@ class Employee {
             cpf: employee.cpf,
             endereco: employee.endereco,
             email: employee.email,
-            empresas: employee.empresas.map((e) => e.cnpj),
+            empresas: (employee.empresas && employee.empresas.map((e) => e.cnpj)),
         } as EmployeeDTO
     }
 }
