@@ -12,7 +12,7 @@ class EmployeeController implements IEmployeeController {
             const employeeCreated = await this.employeeService
                 .create({ nome, cpf, email, endereco, empresas });
 
-            res.status(201).json(Employee.toDTO(employeeCreated));
+            res.status(201).json(Employee.toViewModel(employeeCreated));
         } catch(err) {
             next(err);
         }
@@ -35,7 +35,7 @@ class EmployeeController implements IEmployeeController {
             const employeeUpdated = await this.employeeService
                 .update({ id: parseInt(id, 10), nome, cpf, email, endereco, empresas });
 
-            res.status(200).json(Employee.toDTO(employeeUpdated));
+            res.status(200).json(Employee.toViewModel(employeeUpdated));
         } catch(err) {
             next(err);
         }
@@ -44,7 +44,7 @@ class EmployeeController implements IEmployeeController {
     async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const employees = await this.employeeService.findAll();
-            res.status(200).json(employees.map((e) => Employee.toDTO(e)));
+            res.status(200).json(employees.map((e) => Employee.toViewModel(e)));
         } catch(err) {
             next(err);
         }
@@ -54,7 +54,7 @@ class EmployeeController implements IEmployeeController {
         try {
             const { id } = req.params;
             const employee = await this.employeeService.findById(parseInt(id, 10));
-            res.status(200).json(Employee.toDTO(employee));
+            res.status(200).json(Employee.toViewModel(employee));
         } catch(err) {
             next(err);
         }

@@ -3,6 +3,7 @@ import BadRequestError from "../../errors/BadRequestError";
 import ConflictError from "../../errors/ConflictError";
 import UnprocessableEntityError from "../../errors/UnprocessableEntityError";
 import CPFValidator from "../../utils/CPFValidator";
+import EmployeeViewModel from "../../viewModels/EmployeeViewModel";
 import Enterprise from "./Enterprise";
 
 class Employee {
@@ -85,8 +86,7 @@ class Employee {
         this._empresas.push(empresas);
     }
 
-
-    public static toDTO(employee: Employee) {
+    public static toDTO(employee: Employee): EmployeeDTO {
         return {
             id: employee.id,
             nome: employee.nome,
@@ -94,7 +94,18 @@ class Employee {
             endereco: employee.endereco,
             email: employee.email,
             empresas: (employee.empresas && employee.empresas.map((e) => e.cnpj)),
-        } as EmployeeDTO
+        };
+    }
+
+    public static toViewModel(employee: Employee): EmployeeViewModel {
+        return {
+            id: employee.id,
+            nome: employee.nome,
+            cpf: employee.cpf,
+            endereco: employee.endereco,
+            email: employee.email,
+            empresas: employee.empresas.map((e) => Enterprise.toViewModel(e)),
+        };
     }
 }
 

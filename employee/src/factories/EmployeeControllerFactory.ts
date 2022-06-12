@@ -5,7 +5,7 @@ import EmployeeController from '../controllers/EmployeeController';
 import EnterpriseRepository from '../models/repository/EnterpriseRepository';
 import RabbitMQServer from '../broker/server/RabbitmqServer';
 
-class EmployeeFactory {
+class EmployeeControllerFactory {
     create(): EmployeeController {
         const employeeRepository = new EmployeeRepository(connection);
         const enterpriseRepository = new EnterpriseRepository(connection);
@@ -16,4 +16,4 @@ class EmployeeFactory {
     }
 }
 
-export default EmployeeFactory;
+export default EmployeeControllerFactory;

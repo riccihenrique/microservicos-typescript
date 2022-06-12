@@ -1,6 +1,9 @@
 import { Pool, QueryResult } from 'pg';
+import EmployeeDTO from '../../DTOs/EmployeeDTO';
+import EnterpriseDTO from '../../DTOs/EnterpriseDTO';
+import EmployeeFactory from '../../factories/EmployeeFactory';
+import EnterpriseFactory from '../../factories/EnterpriseFactory';
 import Employee from '../entities/Employee';
-import Enterprise from '../entities/Enterprise';
 import IEmployeeRepository from './IEmployeeRepository';
 
 class EmployeeRepository implements IEmployeeRepository{
@@ -45,15 +48,29 @@ class EmployeeRepository implements IEmployeeRepository{
 
     async findAll(): Promise<Employee[]> {
         const { rows } = await this.db.query<QueryResult>('SELECT * FROM employees');
-        return rows as unknown as Employee[];
+
+        const employees: Employee[] = [];
+        for(let row of rows) {
+            let employee =new EmployeeFactory().create(row as unknown as EmployeeDTO);
+            employee = await this.addEnterpriseInfo(employee);
+            employees.push(employee);
+        }
+
+        return employees;
     }
 
     async findById(id: number): Promise<Employee | null> {
-        const { rows } = await this.db.query<QueryResult>(
+        let { rows } = await this.db.query<QueryResult>(
             'SELECT * FROM employees WHERE id = $1',
             [id]
         );
-        return rows[0] as unknown as Employee;
+
+        if(!rows[0]) return null;
+
+        let employee = new EmployeeFactory().create(rows[0] as unknown as EmployeeDTO);
+        employee = await this.addEnterpriseInfo(employee);
+
+        return employee;
     }
 
     private async insertEmployeEnterprises(employee: Employee) {
@@ -63,6 +80,22 @@ class EmployeeRepository implements IEmployeeRepository{
                 [enterprise.id, employee.id]
             );
         }
+    }
+
+    private async addEnterpriseInfo(employee: Employee): Promise<Employee> {
+        const result = await this.db.query<QueryResult>(
+            `SELECT ent.*
+            FROM enterprises ent
+            INNER JOIN employee_enterprise ee ON ent.id = ee.enterprise_id
+            WHERE ee.employee_id = $1`,
+            [employee.id]
+        );
+
+        for(let enterprise of result.rows) {
+            employee.addEmpresas(new EnterpriseFactory().create(enterprise as unknown as EnterpriseDTO));
+        }
+
+        return employee;
     }
 }
 

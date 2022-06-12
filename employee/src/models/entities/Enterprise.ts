@@ -1,4 +1,5 @@
 import EnterpriseDTO from "../../DTOs/EnterpriseDTO";
+import EnterpriseViewModel from "../../viewModels/EnterpriseViewModel";
 
 class Enterprise {
     private _id: number = 0;
@@ -60,7 +61,16 @@ class Enterprise {
             nome: enterprise.nome,
             cnpj: enterprise.cnpj,
             endereco: enterprise.endereco,
-        } as EnterpriseDTO
+        };
+    }
+
+    public static toViewModel(enterprise: Enterprise): EnterpriseViewModel {
+        return {
+            id: enterprise.id,
+            nome: enterprise.nome,
+            cnpj: enterprise.cnpj,
+            endereco: enterprise.endereco,
+        };
     }
 }
 
