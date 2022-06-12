@@ -57,6 +57,12 @@ class EmployeeService implements IEmployeeService {
         employee = await this.enterprise_check(employee, employeeData.empresas);
 
         const employeeUpdated = await this.employeeRepository.update(employee);
+        this.messageBroker.publishInExchange(
+            RABBIT_CONFIG.EXCHANGE_NAME,
+            RABBIT_CONFIG.QUEUE_EMPLOYEE_UPDATED,
+            Employee.toDTO(employeeUpdated)
+        );
+
         return employeeUpdated;
     }
 

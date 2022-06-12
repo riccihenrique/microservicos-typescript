@@ -23,11 +23,11 @@ class EnterpriseRepository implements IEnterpriseRepository{
     }
 
     async update(enterprise: Enterprise): Promise<Enterprise> {
-        const { rows } = await this.db.query<QueryResult>(
+        await this.db.query<QueryResult>(
             'UPDATE enterprises SET nome = $1, endereco = $2 WHERE id = $3 RETURNING *',
             [enterprise.nome, enterprise.endereco, enterprise.id]
         );
-        return rows[0] as unknown as Enterprise;
+        return enterprise;
     }
 
     async delete(id: number): Promise<void> {

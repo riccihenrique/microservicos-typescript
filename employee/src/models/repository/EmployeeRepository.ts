@@ -29,13 +29,13 @@ class EmployeeRepository implements IEmployeeRepository{
     async update(employee: Employee): Promise<Employee> {
         await this.db.query('DELETE FROM employee_enterprise WHERE employee_id = $1', [employee.id]);
 
-        const { rows } = await this.db.query<QueryResult>(
+        await this.db.query<QueryResult>(
             'UPDATE employees SET nome = $1, email = $2, endereco = $3 WHERE id = $4 RETURNING *',
             [employee.nome, employee.email, employee.endereco, employee.id]
         );
 
         await this.insertEmployeEnterprises(employee);
-        return rows[0] as unknown as Employee;
+        return employee;
     }
 
     async delete(id: number): Promise<void> {
