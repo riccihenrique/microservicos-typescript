@@ -5,9 +5,11 @@ import IEnterpriseService from "./IEnterpriseService";
 import NotFoundError from "../errors/NotFoundError";
 import UnprocessableEntityError from "../errors/UnprocessableEntityError";
 import IEnterpriseRepository from "../models/repository/IEnterpriseRepository";
+import IBrokerServer from "../broker/server/IBrokerServer";
+import { RABBIT_CONFIG } from "../broker/config";
 
 class EnterpriseService implements IEnterpriseService {
-    constructor(private enterpriseRepository: IEnterpriseRepository) { }
+    constructor(private enterpriseRepository: IEnterpriseRepository, private messageBroker: IBrokerServer) { }
 
     async create(enterpriseData: EnterpriseDTO) {
         const { nome, cnpj, endereco } = enterpriseData;
@@ -18,6 +20,11 @@ class EnterpriseService implements IEnterpriseService {
         if(enterpriseFound) throw new ConflictError('CNPJ já cadastrado');
 
         const enterpriseCreated = await this.enterpriseRepository.create(enterprise);
+        this.messageBroker.publishInExchange(
+            RABBIT_CONFIG.EXCHANGE_NAME,
+            RABBIT_CONFIG.ROUTING_KEY_ENTERPRISE_CREATED,
+            Enterprise.toDTO(enterpriseCreated)
+        );
 
         return enterpriseCreated;
     }
