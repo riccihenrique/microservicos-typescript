@@ -1,5 +1,5 @@
 import connection from '../models/connection';
-import EnterpriseCreated from '../events/handles/employee/EnterpriseCreated';
+import EnterpriseCreated from '../events/handles/enterprise/EnterpriseCreated';
 import EnterpriseRepository from '../models/repository/EnterpriseRepository';
 
 class EnterpriseCreatedFactory {
