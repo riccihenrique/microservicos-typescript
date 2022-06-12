@@ -1,62 +1,109 @@
-version: '3.8'
+version: '3.9'
 services:
   db_enterprise:
     image: postgres
     container_name: db_enterprise
     restart: always
     environment:
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=enterprise
+      - POSTGRES_PASSWORD=$ENTERPRISE_DB_PASS
+      - POSTGRES_DB=$ENTERPRISE_DB_DATABASE
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - 5432:5432
+    env_file:
+      - ./.env
 
   db_employee:
     image: postgres
     container_name: db_employee
     restart: always
     environment:
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=employee
+      - POSTGRES_PASSWORD=$EMPLOYEE_DB_PASS
+      - POSTGRES_DB=$EMPLOYEE_DB_DATABASE
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - 5431:5432
+    env_file:
+      - ./.env
 
   api_enterprise:
     image: node
     restart: always
     container_name: api_enterprise
-    command: npm run start:dev
+    command: bash -c "npm run start:dev"
     working_dir: /app
     volumes:
-      - ./enterprise:/app
+      - ./enterprise/:/app
+    depends_on:
+      db_enterprise:
+          condition: service_healthy
+      rabbitmq:
+          condition: service_healthy
     environment:
-      - API_PORT=3000
+      - API_PORT=$ENTERPRISE_SERVER_PORT
       - DB_HOST=db_enterprise
-      - DB_PASS=postgres
-      - DB_USER=postgres
-      - DB_PORT=5432
+      - RABBIT_HOST=rabbitmq
+      - DB_PASS=$ENTERPRISE_DB_PASS
+      - DB_USER=$ENTERPRISE_DB_USER
+      - DB_PORT=$ENTERPRISE_DB_PORT
     ports:
-      - 3000:3000
+      - $ENTERPRISE_SERVER_PORT:$ENTERPRISE_SERVER_PORT
     env_file:
-      - ./enterprise/.env
+      - ./.env
 
   api_employee:
     image: node
     restart: always
     container_name: api_employee
-    command: npm run start:dev
+    command: bash -c "npm run start:dev"
     working_dir: /app
     volumes:
-      - ./employee:/app
+      - ./employee/:/app
+    depends_on:
+      db_employee:
+        condition: service_healthy
+      rabbitmq:
+          condition: service_healthy
     environment:
-      - API_PORT=3001
+      - API_PORT=$EMPLOYEE_SERVER_PORT
       - DB_HOST=db_employee
-      - DB_PASS=postgres
-      - DB_USER=postgres
-      - DB_PORT=5432
+      - RABBIT_HOST=rabbitmq
+      - DB_PASS=$EMPLOYEE_DB_PASS
+      - DB_USER=$EMPLOYEE_DB_USER
+      - DB_PORT=$EMPLOYEE_DB_PORT
     ports:
-      - 3001:3001
+      - $EMPLOYEE_SERVER_PORT:$EMPLOYEE_SERVER_PORT
     env_file:
-      - ./employee/.env
+      - ./.env
+
+  rabbitmq:
+    build: ./
+    container_name: rabbitmq
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - $RABBIT_SERVER_PORT:5672
+      - $RABBIT_DASH_PORT:15672
+
+    healthcheck:
+        test: curl -f http://localhost:15672 || exit 1
+        interval: 30s
+        timeout: 10s
+        retries: 5
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=$RABBIT_USER
+      - RABBITMQ_DEFAULT_PASS=$RABBIT_PASS
 
 volumes:
   db:
