@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import EmployeeFactory from '../factories/EmployeeFactory';
+import EmployeeFactory from '../factories/EmployeeControllerFactory';
 
 const employeeRouter = Router();
 const employeeFactory = new EmployeeFactory();

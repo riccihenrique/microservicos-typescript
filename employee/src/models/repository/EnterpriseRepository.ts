@@ -6,8 +6,8 @@ class EnterpriseRepository implements IEnterpriseRepository{
     constructor(private db: Pool) {}
 
     async create(enterprise: Enterprise): Promise<Enterprise> {
-        const { rows } = await this.db.query<QueryResult>('INSERT INTO enterprises (nome, cnpj, endereco) VALUES ($1, $2, $3) RETURNING *',
-            [enterprise.nome, enterprise.cnpj, enterprise.endereco]);
+        const { rows } = await this.db.query<QueryResult>('INSERT INTO enterprises (nome, cnpj, endereco, id_integracao) VALUES ($1, $2, $3, $4) RETURNING *',
+            [enterprise.nome, enterprise.cnpj, enterprise.endereco, enterprise.idIntegracao]);
         enterprise.id = (rows[0] as unknown as Enterprise).id;
         return enterprise;
     }
