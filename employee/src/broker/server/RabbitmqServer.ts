@@ -1,9 +1,10 @@
-import { Connection, Channel, connect, Message } from "amqplib";
-import IBrokerProvider from "./IBrokerProvider";
+import { Connection, Channel, connect, Message, ConsumeMessage } from "amqplib";
+import IBrokerServer from "./IBrokerServer";
 
-class RabbitMQProvider implements IBrokerProvider {
+class RabbitMQServer implements IBrokerServer {
     private connection!: Connection;
     private channel!: Channel;
+    private static instance: RabbitMQServer;
 
     async start(uri: string) {
         try {
@@ -16,6 +17,13 @@ class RabbitMQProvider implements IBrokerProvider {
             console.log('Error when try to connect rabbitmq...', error);
             throw error;
         }
+    }
+
+    static getInstance() {
+        if(!this.instance)
+            this.instance = new RabbitMQServer();
+
+        return this.instance;
     }
 
     async createExchange(exchangeName: string, exchangeType: string) {
@@ -34,7 +42,7 @@ class RabbitMQProvider implements IBrokerProvider {
         return this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)));
     }
 
-    publishInExchange(exchange: string, routingKey: string, message: string) {
+    publishInExchange(exchange: string, routingKey: string, message: object) {
         return this.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
     }
 
@@ -46,5 +54,4 @@ class RabbitMQProvider implements IBrokerProvider {
     }
 }
 
-const rabbitMQInstance = new RabbitMQProvider();
-export default rabbitMQInstance;
+export default RabbitMQServer;

@@ -1,6 +1,6 @@
 import { Replies } from 'amqplib';
 
-export default interface IBrokerProvider {
+export default interface IBrokerServer {
     start(uri: string): Promise<void>;
     createExchange(exchangeName: string, exchangeType: string): Promise<void>;
     createQueue(queueName: string): Promise<void>;
