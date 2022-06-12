@@ -42,19 +42,6 @@ class EmployeeRepository implements IEmployeeRepository{
         await this.db.query<QueryResult>('DELETE FROM employees WHERE id = $1', [id]);
     }
 
-    async findAll(): Promise<Employee[]> {
-        const { rows } = await this.db.query<QueryResult>('SELECT * FROM employees');
-        return rows as unknown as Employee[];
-    }
-
-    async findById(id: number): Promise<Employee | null> {
-        const { rows } = await this.db.query<QueryResult>(
-            'SELECT * FROM employees WHERE id = $1',
-            [id]
-        );
-        return rows[0] as unknown as Employee;
-    }
-
     private async insertEmployeEnterprises(employee: Employee) {
         for(let enterprise of employee.empresas) {
             await this.db.query<QueryResult>(

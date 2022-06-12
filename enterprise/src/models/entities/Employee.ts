@@ -75,18 +75,6 @@ class Employee {
         this._idIntegracao = idIntegracao;
     }
 
-    public static toDTO(employee: Employee): EmployeeDTO {
-        return {
-            id: employee.id,
-            nome: employee.nome,
-            cpf: employee.cpf,
-            endereco: employee.endereco,
-            email: employee.email,
-            empresas: (employee.empresas && employee.empresas.map((e) => e.cnpj)),
-            idIntegracao: employee.idIntegracao,
-        };
-    }
-
     public static toViewModel(employee: Employee): EmployeeViewModel {
         return {
             id: employee.id,

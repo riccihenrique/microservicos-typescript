@@ -37,19 +37,6 @@ class EnterpriseRepository implements IEnterpriseRepository{
         );
         await this.db.query<QueryResult>('DELETE FROM enterprises WHERE id = $1', [id]);
     }
-
-    async findAll(): Promise<Enterprise[]> {
-        const { rows } = await this.db.query<QueryResult>('SELECT * FROM enterprises');
-        return rows as unknown as Enterprise[];
-    }
-
-    async findById(id: number): Promise<Enterprise | null> {
-        const { rows } = await this.db.query<QueryResult>(
-            'SELECT * FROM enterprises WHERE id = $1',
-            [id]
-        );
-        return rows[0] as unknown as Enterprise;
-    }
 }
 
 export default EnterpriseRepository;

@@ -55,15 +55,6 @@ class Enterprise {
         this._endereco = endereco;
     }
 
-    public static toDTO(enterprise: Enterprise) {
-        return {
-            id: enterprise.id,
-            nome: enterprise.nome,
-            cnpj: enterprise.cnpj,
-            endereco: enterprise.endereco,
-        };
-    }
-
     public static toViewModel(enterprise: Enterprise): EnterpriseViewModel {
         return {
             id: enterprise.id,
