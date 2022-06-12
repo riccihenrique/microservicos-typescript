@@ -56,13 +56,17 @@ class EnterpriseService implements IEnterpriseService {
         const enterpriseFound = await this.enterpriseRepository.findById(id);
 
         if(!enterpriseFound) throw new NotFoundError('Empresa não encontrada');
+        try {
+            await this.enterpriseRepository.delete(id);
+            this.messageBroker.publishInExchange(
+                RABBIT_CONFIG.EXCHANGE_NAME,
+                RABBIT_CONFIG.ROUTING_KEY_ENTERPRISE_DELETED,
+                Enterprise.toDTO(enterpriseFound)
+            );
+        } catch(err) {
+            throw new ConflictError('Não é possível excluir uma empresa que possui funcionários vinculados');
+        }
 
-        await this.enterpriseRepository.delete(id);
-        this.messageBroker.publishInExchange(
-            RABBIT_CONFIG.EXCHANGE_NAME,
-            RABBIT_CONFIG.ROUTING_KEY_ENTERPRISE_DELETED,
-            Enterprise.toDTO(enterpriseFound)
-        );
     }
 
     findAll(): Promise<Enterprise[]> {

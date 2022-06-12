@@ -35,7 +35,6 @@ class EnterpriseRepository implements IEnterpriseRepository{
     }
 
     async delete(id: number): Promise<void> {
-        await this.db.query<QueryResult>('DELETE FROM employee_enterprise WHERE enterprise_id = $1', [id]);
         await this.db.query<QueryResult>('DELETE FROM enterprises WHERE id = $1', [id]);
     }
 
