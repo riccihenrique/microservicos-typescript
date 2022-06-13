@@ -1,8 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
-import RabbitMQSetup from './broker/RabbitMQSetup';
-import ErrorBase from './errors/ErrorBase';
-import EmployeeControllerFactory from './factories/EmployeeControllerFactory';
-import EmployeeRouter from './routes/EmployeeRouter';
+import ErrorBase from '../../src/errors/ErrorBase';
+import EmployeeRouter from '../../src/routes/EmployeeRouter';
+import EmployeeControllerFactoryTest from './factories/EmployeeControllerFactoryTest';
 
 class App {
     private app;
@@ -13,13 +12,6 @@ class App {
       this.middlewares();
       this.routes();
       this.errorMiddleware();
-    }
-
-    listen(port: string) {
-      this.app.listen(port, async () => {
-        RabbitMQSetup.init();
-        console.log(`Running on ${port} port.`)}
-      );
     }
 
     private middlewares() {
@@ -37,7 +29,7 @@ class App {
     }
 
     private routes() {
-      this.app.use(new EmployeeRouter(new EmployeeControllerFactory()).employeeRouter);
+      this.app.use(new EmployeeRouter(new EmployeeControllerFactoryTest()).employeeRouter);
     }
 
     getExpressApp() {

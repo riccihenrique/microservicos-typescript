@@ -1,23 +1,9 @@
 import request from 'supertest';
-import App from '../src/App';
+import App from './Mock/AppTest';
 
 let app = new App();
 
-describe('GET employee', () => {
-    beforeAll(() => {
-        jest.mock('../src/models/repository/EnterpriseRepository', () => {
-            return {
-              findAll: jest.fn().mockImplementation(() => {
-                return [];
-              })
-            };
-        });
-    });
-
-    afterAll(() => {
-        jest.restoreAllMocks();
-    });
-
+describe('GET enterprise', () => {
     test('Verify if status code is 200', async () => {
         const response = await request(app.getExpressApp()).get('/enterprises');
 

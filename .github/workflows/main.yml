@@ -1,15 +1,34 @@
 name: Test
+
 on:
   push:
-    branches:
-      - main
   pull_request:
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build App
+        env:
+          RABBIT_USER: ${{secrets.RABBIT_USER}}
+          RABBIT_PASS: ${{secrets.RABBIT_PASS}}
+          RABBIT_SERVER_PORT: ${{secrets.RABBIT_SERVER_PORT}}
+          RABBIT_DASH_PORT: ${{secrets.RABBIT_DASH_PORT}}
+
+          ENTERPRISE_DB_PORT: ${{secrets.ENTERPRISE_DB_PORT}}
+          ENTERPRISE_DB_DATABASE: ${{secrets.ENTERPRISE_DB_DATABASE}}
+          ENTERPRISE_DB_USER: ${{secrets.ENTERPRISE_DB_USER}}
+          ENTERPRISE_DB_PASS: ${{secrets.ENTERPRISE_DB_PASS}}
+          ENTERPRISE_SERVER_PORT: ${{secrets.ENTERPRISE_SERVER_PORT}}
+
+          EMPLOYEE_DB_PORT: ${{secrets.EMPLOYEE_DB_PORT}}
+          EMPLOYEE_DB_DATABASE: ${{secrets.EMPLOYEE_DB_DATABASE}}
+          EMPLOYEE_DB_USER: ${{secrets.EMPLOYEE_DB_USER}}
+          EMPLOYEE_DB_PASS: ${{secrets.EMPLOYEE_DB_PASS}}
+          EMPLOYEE_SERVER_PORT: ${{secrets.EMPLOYEE_SERVER_PORT}}
         run: docker-compose up -d
-      -name: Teste Employee
-        run: docker exec -it --name api_employee npm test
+      - name: Teste Employee
+        run: docker exec api_employee bash -c "npm i && npm test"
+      - name: Teste Enterprise
+        run: docker exec api_enterprise bash -c "npm i && npm test"

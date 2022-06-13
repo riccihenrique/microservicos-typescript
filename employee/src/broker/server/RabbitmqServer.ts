@@ -38,19 +38,19 @@ class RabbitMQServer implements IBrokerServer {
         await this.channel.bindQueue(queueName, exchangeName, routingKey);
     }
 
-    async publishInQueue(queue: string, message: string) {
-        return this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)));
+    publishInQueue(queue: string, message: string) {
+        this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)));
     }
 
     publishInExchange(exchange: string, routingKey: string, message: object) {
-        return this.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
+        this.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
     }
 
     async consumeMessage(queue: string, callback: Function) {
-        return await this.channel.consume(queue, (message) => {
+        await this.channel.consume(queue, (message) => {
             callback(message);
             this.channel.ack(message as Message);
-        })
+        });
     }
 }
 

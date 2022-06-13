@@ -1,6 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express';
 import RabbitMQSetup from './broker/RabbitMQSetup';
+import EnterpriseController from './controllers/EnterpriseController';
 import ErrorBase from './errors/ErrorBase';
+import EnterpriseControllerFactory from './factories/EnterpriseControllerFactory';
+import EnterpriseRouter from './routes/EnterpriseRouter';
 import enterpriseRouter from './routes/EnterpriseRouter';
 
 class App {
@@ -35,7 +38,7 @@ class App {
     }
 
     private routes() {
-        this.app.use(enterpriseRouter);
+        this.app.use(new EnterpriseRouter(new EnterpriseControllerFactory()).enterpriseRouter);
     }
 
     getExpressApp() {
