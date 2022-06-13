@@ -14,8 +14,8 @@ services:
       retries: 5
     ports:
       - 5432:5432
-    env_file:
-      - ./.env
+    # env_file:
+    #   - ./.env
 
   db_employee:
     image: postgres
@@ -31,8 +31,8 @@ services:
       retries: 5
     ports:
       - 5431:5432
-    env_file:
-      - ./.env
+    # env_file:
+    #  - ./.env
 
   api_enterprise:
     image: node
@@ -56,8 +56,8 @@ services:
       - DB_PORT=$ENTERPRISE_DB_PORT
     ports:
       - $ENTERPRISE_SERVER_PORT:$ENTERPRISE_SERVER_PORT
-    env_file:
-      - ./.env
+    # env_file:
+    #   - ./.env
 
   api_employee:
     image: node
@@ -81,15 +81,15 @@ services:
       - DB_PORT=$EMPLOYEE_DB_PORT
     ports:
       - $EMPLOYEE_SERVER_PORT:$EMPLOYEE_SERVER_PORT
-    env_file:
-      - ./.env
+    # env_file:
+    #  - ./.env
 
   rabbitmq:
     build: ./
     container_name: rabbitmq
     restart: always
-    env_file:
-      - ./.env
+    # env_file:
+    #   - ./.env
     ports:
       - $RABBIT_SERVER_PORT:5672
       - $RABBIT_DASH_PORT:15672
