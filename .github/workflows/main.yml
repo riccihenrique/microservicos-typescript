@@ -29,4 +29,6 @@ jobs:
           EMPLOYEE_SERVER_PORT: ${{secrets.EMPLOYEE_SERVER_PORT}}
         run: docker-compose up -d
       - name: Teste Employee
-        run: docker exec -it --name api_employee npm test
+        run: docker exec -it api_employee npm test
+       - name: Teste Enterprise
+        run: docker exec -it api_enterprise npm test

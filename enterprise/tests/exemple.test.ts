@@ -1,7 +1,21 @@
 import request from 'supertest';
 import App from '../src/App';
+const { Pool } = require('pg');
 
 let app = new App();
+
+// setup for to mock pg
+jest.mock('pg', () => {
+  const mPool = {
+    connect: function () {
+      return { query: jest.fn() };
+    },
+    query: jest.fn(),
+    end: jest.fn(),
+    on: jest.fn(),
+  };
+  return { Pool: jest.fn(() => mPool) };
+});
 
 describe('GET employee', () => {
     beforeAll(() => {
