@@ -1,9 +1,9 @@
 name: Test
+
 on:
   push:
-    branches:
-      - main
   pull_request:
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -11,5 +11,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build App
         run: docker-compose up -d
-      -name: Teste Employee
+      - name: Teste Employee
         run: docker exec -it --name api_employee npm test
