@@ -63,7 +63,7 @@ services:
     image: node
     restart: always
     container_name: api_employee
-    # command: bash -c "npm run start:dev"
+    # command: bash -c  "npm run start:dev"
     working_dir: /app
     volumes:
       - ./employee/:/app
