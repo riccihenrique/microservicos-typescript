@@ -40,6 +40,7 @@ services:
     container_name: api_enterprise
     # command: bash -c "npm run start:dev"
     working_dir: /app
+    tty: true
     volumes:
       - ./enterprise/:/app
     depends_on:
@@ -65,6 +66,7 @@ services:
     container_name: api_employee
     command: bash -c  "npm run test"
     working_dir: /app
+    tty: true
     volumes:
       - ./employee/:/app
     depends_on:
