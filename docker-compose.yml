@@ -64,7 +64,7 @@ services:
     image: node
     # restart: always
     container_name: api_employee
-    command: bash -c  "npm run test"
+    # command: bash -c  "npm run test"
     working_dir: /app
     tty: true
     volumes:
