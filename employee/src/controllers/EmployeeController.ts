@@ -44,7 +44,7 @@ class EmployeeController implements IEmployeeController {
     async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const employees = await this.employeeService.findAll();
-            res.status(200).json(employees.map((e) => Employee.toViewModel(e)));
+            res.status(201).json(employees.map((e) => Employee.toViewModel(e)));
         } catch(err) {
             next(err);
         }

@@ -12,7 +12,7 @@ class EnterpriseRepositoryTest implements IEnterpriseRepository {
         throw new Error("Method not implemented.");
     }
     async findAll(): Promise<Enterprise[]> {
-        return [];
+        throw new Error('Erro proposital');
     }
     findById(id: number): Promise<Enterprise | null> {
         throw new Error("Method not implemented.");
