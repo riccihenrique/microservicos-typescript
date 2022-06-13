@@ -31,4 +31,5 @@ jobs:
       - name: Teste Employee
         run: docker exec api_employee bash -c "npm i && npm test"
       - name: Teste Enterprise
+        if: always()
         run: docker exec api_enterprise bash -c "npm i && npm test"
