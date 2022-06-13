@@ -1,7 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import RabbitMQSetup from './broker/RabbitMQSetup';
 import ErrorBase from './errors/ErrorBase';
-import employeeRouter from './routes/EmployeeRouter';
+import EmployeeControllerFactory from './factories/EmployeeControllerFactory';
+import EmployeeRouter from './routes/EmployeeRouter';
 
 class App {
     private app;
@@ -36,7 +37,7 @@ class App {
     }
 
     private routes() {
-      this.app.use(employeeRouter);
+      this.app.use(new EmployeeRouter(new EmployeeControllerFactory()).employeeRouter);
     }
 
     getExpressApp() {
