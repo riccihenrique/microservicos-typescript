@@ -4,7 +4,7 @@ import EmployeeFactory from '../factories/EmployeeControllerFactory';
 const employeeRouter = Router();
 const employeeFactory = new EmployeeFactory();
 
-employeeRouter.route('/employee')
+employeeRouter.route('/employees')
 .post((req: Request, res: Response, next: NextFunction) => {
     const employeeController = employeeFactory.create();
     employeeController.create(req, res, next);
@@ -14,7 +14,7 @@ employeeRouter.route('/employee')
     employeeController.findAll(req, res, next);
 });
 
-employeeRouter.route('/employee/:id')
+employeeRouter.route('/employees/:id')
 .get((req: Request, res: Response, next: NextFunction) => {
     const employeeController = employeeFactory.create();
     employeeController.findById(req, res, next);

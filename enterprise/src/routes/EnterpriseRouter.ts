@@ -4,7 +4,7 @@ import EnterpriseControllerFactory from '../factories/EnterpriseControllerFactor
 const enterpriseRouter = Router();
 const enterpriseFactory = new EnterpriseControllerFactory();
 
-enterpriseRouter.route('/enterprise')
+enterpriseRouter.route('/enterprises')
 .post((req: Request, res: Response, next: NextFunction) => {
     const enterpriseController = enterpriseFactory.create();
     enterpriseController.create(req, res, next);
@@ -14,7 +14,7 @@ enterpriseRouter.route('/enterprise')
     enterpriseController.findAll(req, res, next);
 });
 
-enterpriseRouter.route('/enterprise/:id')
+enterpriseRouter.route('/enterprises/:id')
 .get((req: Request, res: Response, next: NextFunction) => {
     const enterpriseController = enterpriseFactory.create();
     enterpriseController.findById(req, res, next);
