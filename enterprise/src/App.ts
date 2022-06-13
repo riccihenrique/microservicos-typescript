@@ -37,6 +37,10 @@ class App {
     private routes() {
         this.app.use(enterpriseRouter);
     }
+
+    getExpressApp() {
+      return this.app;
+    }
 }
 
 export default App;
