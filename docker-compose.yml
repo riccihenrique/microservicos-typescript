@@ -36,18 +36,17 @@ services:
 
   api_enterprise:
     image: node
-    # restart: always
+    restart: always
     container_name: api_enterprise
-    # command: bash -c "npm run start:dev"
     working_dir: /app
     tty: true
     volumes:
       - ./enterprise/:/app
     depends_on:
       db_enterprise:
-          condition: service_healthy
+        condition: service_healthy
       rabbitmq:
-          condition: service_healthy
+        condition: service_healthy
     environment:
       - API_PORT=$ENTERPRISE_SERVER_PORT
       - DB_HOST=db_enterprise
@@ -57,14 +56,11 @@ services:
       - DB_PORT=$ENTERPRISE_DB_PORT
     ports:
       - $ENTERPRISE_SERVER_PORT:$ENTERPRISE_SERVER_PORT
-    # env_file:
-    #   - ./.env
 
   api_employee:
     image: node
-    # restart: always
+    restart: always
     container_name: api_employee
-    # command: bash -c  "npm run test"
     working_dir: /app
     tty: true
     volumes:
@@ -73,7 +69,7 @@ services:
       db_employee:
         condition: service_healthy
       rabbitmq:
-          condition: service_healthy
+        condition: service_healthy
     environment:
       - API_PORT=$EMPLOYEE_SERVER_PORT
       - DB_HOST=db_employee
@@ -83,15 +79,11 @@ services:
       - DB_PORT=$EMPLOYEE_DB_PORT
     ports:
       - $EMPLOYEE_SERVER_PORT:$EMPLOYEE_SERVER_PORT
-    # env_file:
-    #  - ./.env
 
   rabbitmq:
-    build: ./
+    build: .
     container_name: rabbitmq
     restart: always
-    # env_file:
-    #   - ./.env
     ports:
       - $RABBIT_SERVER_PORT:5672
       - $RABBIT_DASH_PORT:15672

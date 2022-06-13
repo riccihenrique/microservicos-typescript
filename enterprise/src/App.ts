@@ -1,10 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import RabbitMQSetup from './broker/RabbitMQSetup';
-import EnterpriseController from './controllers/EnterpriseController';
 import ErrorBase from './errors/ErrorBase';
 import EnterpriseControllerFactory from './factories/EnterpriseControllerFactory';
 import EnterpriseRouter from './routes/EnterpriseRouter';
-import enterpriseRouter from './routes/EnterpriseRouter';
 
 class App {
     private app;

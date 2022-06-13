@@ -6,7 +6,7 @@ import { RABBIT_CONFIG } from './config';
 import RabbitMqServer from './server/RabbitmqServer';
 
 export default class RabbitMQSetup {
-    static async init() {
+    static async initQueues() {
         try {
             const rabbitInstance = RabbitMqServer.getInstance();
             await rabbitInstance.start(RABBIT_CONFIG.RABBITMQ_URI);
@@ -20,6 +20,18 @@ export default class RabbitMQSetup {
 
             await rabbitInstance.createQueue(RABBIT_CONFIG.QUEUE_ENTERPRISE_DELETED);
             await rabbitInstance.bindQueue(RABBIT_CONFIG.QUEUE_ENTERPRISE_DELETED, RABBIT_CONFIG.EXCHANGE_NAME, RABBIT_CONFIG.ROUTING_KEY_ENTERPRISE_DELETED);
+
+            await rabbitInstance.close();
+
+        } catch (error) {
+            console.log('error rabbitmq: ', error);
+        }
+    }
+
+    static async init() {
+        try {
+            const rabbitInstance = RabbitMqServer.getInstance();
+            await rabbitInstance.start(RABBIT_CONFIG.RABBITMQ_URI);
 
             await rabbitInstance.consumeMessage(RABBIT_CONFIG.QUEUE_EMPLOYEE_CREATED, (message: ConsumeMessage) => {
                 new EmployeeCreatedFactory().create().handle(JSON.parse(message.content.toString()));

@@ -17,7 +17,7 @@ class EmployeeService implements IEmployeeService {
         private messageBroker: IBrokerServer,
     ) { }
 
-    async create(employeeData: EmployeeDTO) {
+    async create(employeeData: EmployeeDTO): Promise<Employee> {
         const { nome, cpf, email, endereco } = employeeData;
         let employee: Employee = new Employee(nome, cpf, email, endereco);
 

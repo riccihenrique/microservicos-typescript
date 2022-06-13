@@ -1,3 +1,4 @@
+import EnterpriseDTO from "../../DTOs/EnterpriseDTO";
 import BadRequestError from "../../errors/BadRequestError";
 import UnprocessableEntityError from "../../errors/UnprocessableEntityError";
 import CNPJValidator from "../../utils/CNPJValidator";
@@ -66,7 +67,7 @@ class Enterprise {
         this._funcionarios.push(employee);
     }
 
-    public static toDTO(enterprise: Enterprise) {
+    public static toDTO(enterprise: Enterprise): EnterpriseDTO {
         return {
             id: enterprise.id,
             nome: enterprise.nome,

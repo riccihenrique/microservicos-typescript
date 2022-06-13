@@ -2,7 +2,7 @@ import EmployeeDTO from "../DTOs/EmployeeDTO";
 import Employee from "../models/entities/Employee";
 
 class EmployeeFactory {
-    create(data: EmployeeDTO) {
+    create(data: EmployeeDTO): Employee {
         const employee = new Employee(data.nome, data.cpf, data.email, data.endereco, data.idIntegracao);
         employee.id = data.id || 0;
         return employee;

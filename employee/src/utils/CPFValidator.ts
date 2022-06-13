@@ -1,5 +1,5 @@
 class CPFValidator {
-    validate(cpf: string) {
+    validate(cpf: string): boolean {
         let soma;
         let resto;
         soma = 0;
@@ -23,7 +23,7 @@ class CPFValidator {
         return true;
     }
 
-    private check_equal_numbers(cpf: string) {
+    private check_equal_numbers(cpf: string): boolean {
         return (
             cpf === '00000000000' ||
             cpf === '11111111111' ||

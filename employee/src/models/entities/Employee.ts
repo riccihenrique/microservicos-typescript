@@ -80,7 +80,7 @@ class Employee {
         return this._empresas;
     }
 
-    addEmpresas(empresas: Enterprise) {
+    addEmpresas(empresas: Enterprise): void {
         if(this._empresas.find((e) => e.cnpj === empresas.cnpj))
             throw new ConflictError('Empresa duplicada');
         this._empresas.push(empresas);

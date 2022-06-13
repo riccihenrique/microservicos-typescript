@@ -4,7 +4,7 @@ import EnterpriseRepository from "../models/repository/EnterpriseRepository";
 import connection from '../models/connection';
 
 class EmployeeUpdatedFactory {
-    create() {
+    create(): EmployeeUpdated {
         const enterpriseRepository = new EnterpriseRepository(connection);
         const employeeRepository = new EmployeeRepository(connection);
         return new EmployeeUpdated(employeeRepository, enterpriseRepository);

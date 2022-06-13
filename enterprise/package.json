@@ -4,8 +4,10 @@
   "description": "",
   "main": "dist/src/index.js",
   "scripts": {
+    "queue:create": "npx tsc && node dist/createqueues.js",
+    "prestart": "npm i && npm run queue:create",
+    "prestart:dev": "npm run queue:create",
     "db:create": "npx tsc && node dist/createdatabase.js",
-    "prestart": "npm install",
     "start": "npx tsc && node .",
     "start:dev": "nodemon src/index.ts",
     "test": "jest --forceExit"

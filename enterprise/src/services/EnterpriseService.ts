@@ -11,7 +11,7 @@ import { RABBIT_CONFIG } from "../broker/config";
 class EnterpriseService implements IEnterpriseService {
     constructor(private enterpriseRepository: IEnterpriseRepository, private messageBroker: IBrokerServer) { }
 
-    async create(enterpriseData: EnterpriseDTO) {
+    async create(enterpriseData: EnterpriseDTO): Promise<Enterprise> {
         const { nome, cnpj, endereco } = enterpriseData;
         const enterprise: Enterprise = new Enterprise(nome, cnpj, endereco);
 

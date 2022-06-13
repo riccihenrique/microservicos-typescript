@@ -3,7 +3,7 @@ import EmployeeRepository from "../models/repository/EmployeeRepository";
 import connection from '../models/connection';
 
 class EmployeeDeletedFactory {
-    create() {
+    create(): EmployeeDeleted {
         const employeeRepository = new EmployeeRepository(connection);
         return new EmployeeDeleted(employeeRepository);
     }

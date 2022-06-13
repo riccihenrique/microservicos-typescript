@@ -10,7 +10,7 @@ class EmployeeCreated {
         private enterpriseRepository: IEnterpriseRepository
     ) { }
 
-    async handle(employeeData: EmployeeDTO) {
+    async handle(employeeData: EmployeeDTO): Promise<void> {
         const employeeFound = await this.employeeRepository.findByCPF(employeeData.cpf);
         if(!employeeFound) {
             const employee = new Employee(employeeData.nome, employeeData.cpf, employeeData.email, employeeData.endereco, employeeData.id as number);

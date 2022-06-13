@@ -2,11 +2,11 @@ import { NextFunction, Request, Response, Router } from 'express';
 import EmployeeFactory from '../factories/EmployeeControllerFactory';
 class EmployeeRouter {
     private _employeeRouter: Router = Router();
-    constructor(private employeeFactory: EmployeeFactory) { 
+    constructor(private employeeFactory: EmployeeFactory) {
         this.defineRoutes();
     }
 
-    private defineRoutes() {
+    private defineRoutes(): void {
         this._employeeRouter.route('/employees')
         .post((req: Request, res: Response, next: NextFunction) => {
             const employeeController = this.employeeFactory.create();

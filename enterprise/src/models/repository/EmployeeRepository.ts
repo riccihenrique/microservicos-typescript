@@ -42,7 +42,7 @@ class EmployeeRepository implements IEmployeeRepository{
         await this.db.query<QueryResult>('DELETE FROM employees WHERE id = $1', [id]);
     }
 
-    private async insertEmployeEnterprises(employee: Employee) {
+    private async insertEmployeEnterprises(employee: Employee): Promise<void> {
         for(let enterprise of employee.empresas) {
             await this.db.query<QueryResult>(
                 'INSERT INTO employee_enterprise (enterprise_id, employee_id) VALUES ($1, $2)',

@@ -6,7 +6,7 @@ class EmployeeDeleted {
         private employeeRepository: IEmployeeRepository
     ) { }
 
-    async handle(employeeData: EmployeeDTO) {
+    async handle(employeeData: EmployeeDTO): Promise<void> {
         const employeeFound = await this.employeeRepository.findByCPF(employeeData.cpf);
         if(employeeFound) {
             await this.employeeRepository.delete(employeeData.id as number);

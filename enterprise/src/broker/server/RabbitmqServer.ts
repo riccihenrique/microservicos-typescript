@@ -19,6 +19,10 @@ class RabbitMQServer implements IBrokerServer {
         }
     }
 
+    async close() {
+        await this.connection.close();
+    }
+
     static getInstance() {
         if(!this.instance)
             this.instance = new RabbitMQServer();

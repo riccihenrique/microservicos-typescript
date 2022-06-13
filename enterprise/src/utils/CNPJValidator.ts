@@ -1,5 +1,5 @@
 class CNPJValidator {
-    validate(cnpj: string) {
+    validate(cnpj: string): boolean {
         let tamanho = cnpj.length - 2
         let numeros = cnpj.substring(0, tamanho);
         let digitos = cnpj.substring(tamanho);
@@ -33,7 +33,7 @@ class CNPJValidator {
         return true;
     }
 
-    private check_equal_numbers(cnpf: string) {
+    private check_equal_numbers(cnpf: string): boolean {
         return (
             cnpf === '0000000000000' ||
             cnpf === '1111111111111' ||

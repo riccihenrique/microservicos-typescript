@@ -1,4 +1,3 @@
-import EnterpriseDTO from "../../DTOs/EnterpriseDTO";
 import EnterpriseViewModel from "../../viewModels/EnterpriseViewModel";
 
 class Enterprise {

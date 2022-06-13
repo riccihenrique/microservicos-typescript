@@ -7,7 +7,7 @@ class EnterpriseRouter {
         this.defineRoutes();
     }
 
-    private defineRoutes() {
+    private defineRoutes(): void {
         this._enterpriseRouter.route('/enterprises')
         .post((req: Request, res: Response, next: NextFunction) => {
             const enterpriseController = this.enterpriseFactory.create();

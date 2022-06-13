@@ -5,7 +5,7 @@ import IEnterpriseRepository from "../../../models/repository/IEnterpriseReposit
 class EnterpriseDeleted {
     constructor(private enterpriseRepository: IEnterpriseRepository) { }
 
-    async handle(enterpriseData: EnterpriseDTO) {
+    async handle(enterpriseData: EnterpriseDTO): Promise<void> {
         const enterpriseFound = await this.enterpriseRepository.findByCNPJ(enterpriseData.cnpj);
         if(enterpriseFound) {
             await this.enterpriseRepository.delete(enterpriseFound.id);
