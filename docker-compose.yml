@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   db_enterprise:
-    image: postgres
+    image: postgres:14
     container_name: db_enterprise
     restart: always
     environment:
@@ -18,7 +18,7 @@ services:
     #   - ./.env
 
   db_employee:
-    image: postgres
+    image: postgres:14
     container_name: db_employee
     restart: always
     environment:
@@ -35,7 +35,7 @@ services:
     #  - ./.env
 
   api_enterprise:
-    image: node
+    image: node:16.15
     restart: always
     container_name: api_enterprise
     working_dir: /app
@@ -58,7 +58,7 @@ services:
       - $ENTERPRISE_SERVER_PORT:$ENTERPRISE_SERVER_PORT
 
   api_employee:
-    image: node
+    image: node:16.15
     restart: always
     container_name: api_employee
     working_dir: /app

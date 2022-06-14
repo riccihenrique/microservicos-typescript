@@ -1,4 +1,4 @@
-CREATE TABLE enterprises (
+CREATE TABLE IF NOT EXISTS  enterprises (
 	id SERIAL NOT NULL PRIMARY KEY,
 	nome varchar(100) NOT NULL,
 	cnpj varchar(14) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE enterprises (
 	id_integracao INT
 );
 
-CREATE TABLE employees (
+CREATE TABLE IF NOT EXISTS  employees (
 	id SERIAL NOT NULL PRIMARY KEY,
 	nome VARCHAR(100) NOT NULL,
 	cpf VARCHAR(11) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE employees (
 	endereco VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE employee_enterprise (
+CREATE TABLE IF NOT EXISTS  employee_enterprise (
 	enterprise_id INT NOT NULL,
 	employee_id INT NOT NULL,
     CONSTRAINT pk_employee_enterprise PRIMARY KEY (enterprise_id, employee_id),
