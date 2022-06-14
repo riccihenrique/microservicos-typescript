@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "dd91bfff-dba3-4997-b00d-4a82e83f2fc5",
+		"name": "Desafio microserviçoes",
+		"description": "Microserviços com NodeJs para gerenciamento de empresas e colaboradores.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Enterprise",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_enterprise}}",
+							"host": [
+								"{{base_url_enterprise}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_enterprise}}/6",
+							"host": [
+								"{{base_url_enterprise}}"
+							],
+							"path": [
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Empresa 2\",\r\n    \"cnpj\": \"85.610.684/0001-04\",\r\n    \"endereco\": \"Endereco 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_enterprise}}",
+							"host": [
+								"{{base_url_enterprise}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Empresa 2\",\r\n    \"cnpj\": \"86963488000178\",\r\n    \"endereco\": \"Endereço 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_enterprise}}/ 3",
+							"host": [
+								"{{base_url_enterprise}}"
+							],
+							"path": [
+								" 3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_enterprise}}/4",
+							"host": [
+								"{{base_url_enterprise}}"
+							],
+							"path": [
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_employee}}",
+							"host": [
+								"{{base_url_employee}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_employee}}/103",
+							"host": [
+								"{{base_url_employee}}"
+							],
+							"path": [
+								"103"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Colaborador 1\",\r\n    \"cpf\": \"43731441845\",\r\n    \"email\": \"colaborador@testete.com\",\r\n    \"endereco\": \"Rua teste 1\",\r\n    \"empresas\": [\"86963488000178\", \"85610684000104\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_employee}}",
+							"host": [
+								"{{base_url_employee}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Colaborador 5\",\r\n    \"cpf\": \"43731441845\",\r\n    \"email\": \"colaborador4@testete.com\",\r\n    \"endereco\": \"Rua teste 5\",\r\n    \"empresas\": [\"85610684000104\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_employee}}/10",
+							"host": [
+								"{{base_url_employee}}"
+							],
+							"path": [
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_employee}}/ 9",
+							"host": [
+								"{{base_url_employee}}"
+							],
+							"path": [
+								" 9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url_enterprise",
+			"value": "http://localhost:3000/enterprises",
+			"type": "default"
+		},
+		{
+			"key": "base_url_employee",
+			"value": "http://localhost:3001/employees",
+			"type": "default"
+		}
+	]
+}
